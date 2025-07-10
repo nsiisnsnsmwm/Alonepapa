@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>VishalX Launcher</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script>
+        let launched = {{ 'true' if launched else 'false' }};
+        let duration = {{ duration | tojson if launched else '0' }};
+
+        function updateBar() {
+            let bar = document.getElementById("loader-bar");
+            let width = 0;
+            let interval = setInterval(() => {
+                if (width >= 100) {
+                    clearInterval(interval);
+                } else {
+                    width += 100 / duration;
+                    bar.style.width = width + "%";
+                }
+            }, 1000);
+        }
+
+        window.onload = function () {
+            if (launched === true) {
+                updateBar();
+            }
+        };
+    </script>
+</head>
+<body>
+    <h1>🚨 ALONEBOY DDOS SERVER  🚨</h1>
+    <form method="POST">
+        <input name="ip" placeholder="Enter IP" value="{{ ip if launched else '' }}" required><br>
+        <input name="port" placeholder="Port" value="{{ port if launched else '' }}" required><br>
+        <input name="duration" placeholder="Duration (sec)" value="{{ duration if launched else '' }}" required><br>
+        
+        <button type="submit" name="action" value="launch">🚀 Launch</button>
+        <button type="submit" name="action" value="reset">♻️ Reset</button>
+    </form>
+
+    {% if launched %}
+    <div class="loader">
+        <div id="loader-bar"></div>
+    </div>
+    <p>Attacking for {{ duration }} seconds...</p>
+    {% endif %}
+</body>
+</html>
