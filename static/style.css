@@ -1,0 +1,47 @@
+body {
+    background-color: #000010;
+    color: #0ff;
+    font-family: 'Segoe UI', sans-serif;
+    text-align: center;
+    padding-top: 60px;
+}
+
+input, button {
+    margin: 10px;
+    padding: 15px;
+    border-radius: 10px;
+    border: none;
+    font-size: 16px;
+    width: 300px;
+}
+
+button {
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button[name="action"][value="launch"] {
+    background-color: #00ccff;
+    color: #000;
+}
+
+button[name="action"][value="reset"] {
+    background-color: #ff4444;
+    color: white;
+}
+
+.loader {
+    width: 300px;
+    height: 30px;
+    background: #222;
+    margin: 20px auto;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+#loader-bar {
+    height: 100%;
+    width: 0;
+    background: #0f0;
+    transition: width 1s;
+}
