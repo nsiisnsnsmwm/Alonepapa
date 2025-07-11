@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>VishalX Launcher</title>
+    <meta charset="UTF-8">
+    <title>HackerX Launcher</title>
     <link rel="stylesheet" href="/static/style.css">
     <script>
         let launched = {{ 'true' if launched else 'false' }};
@@ -9,6 +10,7 @@
 
         function updateBar() {
             let bar = document.getElementById("loader-bar");
+            let percent = document.getElementById("loader-percent");
             let width = 0;
             let interval = setInterval(() => {
                 if (width >= 100) {
@@ -16,33 +18,47 @@
                 } else {
                     width += 100 / duration;
                     bar.style.width = width + "%";
+                    percent.innerText = Math.floor(width) + "%";
                 }
             }, 1000);
+        }
+
+        function pingServer() {
+            const ip = document.getElementById("ip").value;
+            const pingResult = document.getElementById("ping-result");
+            pingResult.innerText = "Pinging " + ip + "...";
+            fetch("https://api.ipify.org?format=json") // fake ping request
+                .then(() => {
+                    pingResult.innerText = "Ping successful to " + ip;
+                })
+                .catch(() => {
+                    pingResult.innerText = "Ping failed.";
+                });
         }
 
         window.onload = function () {
             if (launched === true) {
                 updateBar();
             }
-        };
+        }
     </script>
 </head>
 <body>
-    <h1>🚨 ALONEBOY DDOS SERVER  🚨</h1>
-    <form method="POST">
-        <input name="ip" placeholder="Enter IP" value="{{ ip if launched else '' }}" required><br>
-        <input name="port" placeholder="Port" value="{{ port if launched else '' }}" required><br>
-        <input name="duration" placeholder="Duration (sec)" value="{{ duration if launched else '' }}" required><br>
-        
-        <button type="submit" name="action" value="launch">🚀 Launch</button>
-        <button type="submit" name="action" value="reset">♻️ Reset</button>
+    <h1>👾 ALONEBOY DDOS SERVER ONLINE</h1>
+    <div class="matrix-bg"></div>
+    <form method="post">
+        <input type="text" name="ip" id="ip" placeholder="Enter BGMI Server IP" required>
+        <input type="text" name="port" placeholder="Enter Port" required>
+        <input type="text" name="duration" placeholder="Enter Duration (sec)" required>
+        <br>
+        <button type="submit" name="action" value="launch">🚀 Launch Attack</button>
+        <button type="button" onclick="pingServer()">📡 Ping Server</button>
+        <button type="submit" name="action" value="reset">🔁 Reset</button>
     </form>
-
-    {% if launched %}
-    <div class="loader">
+    <p id="ping-result"></p>
+    <div class="loader-container">
         <div id="loader-bar"></div>
+        <span id="loader-percent">0%</span>
     </div>
-    <p>Attacking for {{ duration }} seconds...</p>
-    {% endif %}
 </body>
 </html>
