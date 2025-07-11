@@ -1,18 +1,27 @@
 body {
-    background-color: #000010;
-    color: #0ff;
-    font-family: 'Segoe UI', sans-serif;
+    background-color: #000000;
+    color: #00ff00;
+    font-family: 'Courier New', monospace;
     text-align: center;
-    padding-top: 60px;
+    padding-top: 50px;
+    overflow: hidden;
+}
+
+h1 {
+    font-size: 2em;
+    text-shadow: 0 0 10px #00ff00;
 }
 
 input, button {
     margin: 10px;
-    padding: 15px;
-    border-radius: 10px;
+    padding: 12px;
+    border-radius: 8px;
     border: none;
     font-size: 16px;
-    width: 300px;
+    width: 250px;
+    background-color: #111;
+    color: #0f0;
+    box-shadow: 0 0 8px #0f0;
 }
 
 button {
@@ -20,28 +29,46 @@ button {
     cursor: pointer;
 }
 
-button[name="action"][value="launch"] {
-    background-color: #00ccff;
-    color: #000;
+button:hover {
+    background-color: #0f0;
+    color: black;
 }
 
-button[name="action"][value="reset"] {
-    background-color: #ff4444;
-    color: white;
-}
-
-.loader {
-    width: 300px;
-    height: 30px;
-    background: #222;
-    margin: 20px auto;
-    border-radius: 15px;
-    overflow: hidden;
+.loader-container {
+    position: relative;
+    width: 80%;
+    height: 25px;
+    margin: 30px auto;
+    border: 1px solid #0f0;
+    border-radius: 10px;
+    background-color: #111;
 }
 
 #loader-bar {
     height: 100%;
-    width: 0;
-    background: #0f0;
-    transition: width 1s;
+    width: 0%;
+    background: linear-gradient(to right, #00ff00, #004400);
+    border-radius: 10px;
+    transition: width 1s ease-in-out;
+}
+
+#loader-percent {
+    position: absolute;
+    top: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-weight: bold;
+    text-shadow: 0 0 5px #0f0;
+}
+
+.matrix-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: url('https://media.giphy.com/media/l3vR85PnGsBwu1PFK/giphy.gif');
+    background-size: cover;
+    opacity: 0.03;
+    z-index: -1;
 }
